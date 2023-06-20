@@ -17,7 +17,7 @@
             ],
             "iDisplayLength": 5,
             "ajax": {
-                "url": "<?= base_url('akademik/tahunAkademik/loadData') ?>",
+                "url": "<?= base_url('akademik/MataPelajaran/loadData') ?>",
                 "type": "POST"
             },
             // "columnDefs": [{
@@ -33,23 +33,16 @@
                     }
                 },
                 {
-                    "data": "tahun_akademik"
+                    "data": "kode_mapel"
                 },
                 {
-                    "data": "is_active",
-                    "render": function(data) {
-                        if (data == 1) {
-                            return '<span class="badge bg-info"><i class="ri-checkbox-circle-line"></i> Aktif</span>';
-                        } else {
-                            return '<span class="badge bg-danger"><i class="ri-close-circle-line"></i> Tidak Aktif</span>';
-                        }
-                    }
+                    "data": "nama_mapel"
                 },
                 {
                     "data": "null",
                     "className": 'text-center',
                     "render": function(data, type, row, meta) {
-                        return '<a class="btn btn-sm btn-warning" href="javascript:void(0)" title="Delete" onclick=\'aktif("' + row.id + '");\' title="Aktifkan" ><i class="bi bi-check-circle"></i> Active</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_TaAkademik("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_TaAkademik("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
+                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_Mapel("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_Mapel("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';
                     }
                 },
@@ -62,11 +55,6 @@
         table.ajax.reload(null, false); //reload datatable ajax 
     }
 
-    // function access_menu(id) {
-    //     $('#front').hide();
-    //     $('#roleMenu').show();
-    // }
-
     function add_role() {
         save_method = 'add';
         $('.modal-title').text('Add Role');
@@ -75,24 +63,8 @@
         $('#form')[0].reset();
     }
 
-    function aktif(id) {
-        $.ajax({
-            type: "POST",
-            url: "<?= base_url('akademik/tahunAkademik/aktif/') ?>" + id,
-            // data: "data",
-            dataType: "json",
-            success: function(data) {
-                Swal.fire(
-                    'Aktif!',
-                    data.message,
-                    'success'
-                )
-                reload_table();
-            }
-        });
-    }
 
-    function edit_TaAkademik(id) {
+    function edit_Mapel(id) {
         save_method = 'update';
 
         $('.form-group').removeClass('has-error');
@@ -101,11 +73,13 @@
 
         $.ajax({
             type: "GET",
-            url: "<?= base_url('akademik/tahunAkademik/getTaAkademik') ?>/" + id,
+            url: "<?= base_url('akademik/MataPelajaran/getMapel') ?>/" + id,
             dataType: "json",
             success: function(data) {
                 $('[name = "id"]').val(data.id);
-                $('[name = "tahun"]').val(data.tahun_akademik);
+                $('[name = "kode_mapel"]').val(data.kode_mapel);
+                $('[name = "mapel"]').val(data.nama_mapel);
+                $('#kode_mapel').prop('readonly', true);
                 $('#roleModal').modal('show');
                 $('.modal-title').text('Edit Role');
             }
@@ -114,10 +88,10 @@
 
     }
 
-    function delete_TaAkademik(id) {
+    function delete_Mapel(id) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            // title: 'Are you sure?',
+            text: "Data mata pelajara akan dihapus !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -127,7 +101,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url('akademik/TahunAkademik/deleteTaAkademik') ?>",
+                    url: "<?= base_url('akademik/MataPelajaran/deleteMapel') ?>",
                     data: ({
                         id
                     }),
@@ -168,25 +142,38 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?= base_url('akademik/TahunAkademik/addTaAkademik') ?>";
+            url = "<?= base_url('akademik/MataPelajaran/addMapel') ?>";
         } else {
-            url = "<?= base_url('akademik/TahunAkademik/updateTaAkademik') ?>";
+            url = "<?= base_url('akademik/MataPelajaran/updateMapel') ?>";
         }
-
-        var id = document.getElementById('id').value;
-        var tahun = document.getElementById('tahun').value;
 
         $.ajax({
             type: "POST",
             url: url,
-            data: ({
-                id,
-                tahun
-            }),
+            data: $('#form').serialize(),
             dataType: "json",
             success: function(data) {
 
+                if (data.error) {
+                    if (data.kode_error != '') {
+                        $('#kode_error').html(data.kode_error);
+                        $('#btnSave').attr('disabled', false);
+                    } else {
+                        $('#kode_error').html('');
+                    }
+
+                    if (data.mapel_error != '') {
+                        $('#mapel_error').html(data.mapel_error);
+                        $('#btnSave').attr('disabled', false);
+                    } else {
+                        $('#mapel_error').html('');
+                    }
+                }
+
                 if (data.status) {
+                    $('#kode_error').html('');
+                    $('#mapel_error').html('');
+                    $('#form')[0].reset();
                     $('#roleModal').modal('hide');
                     Swal.fire(
                         'Berhasil!',
@@ -200,14 +187,14 @@
                 $('#btnSave').attr('disabled', false);
 
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                Swal.fire({
-                    icon: 'error',
-                    text: 'Something went wrong!',
-                })
-                $('#btnSave').text('save');
-                $('#btnSave').attr('disabled', false);
-            }
+            // error: function(jqXHR, textStatus, errorThrown) {
+            //     Swal.fire({
+            //         icon: 'error',
+            //         text: 'Something went wrong!',
+            //     })
+            //     $('#btnSave').text('save');
+            //     $('#btnSave').attr('disabled', false);
+            // }
         });
 
     }
@@ -231,14 +218,14 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Tahun Akademik</h5>
+                        <h5 class="card-title">Data Mata Pelajaran</h5>
                         <button type="button" id="add_data" onclick="add_role()" class="btn btn-sm btn-primary mb-3"><i class="bi bi-plus-square"></i> Add Data</button>
                         <table id="myTable" width="100%" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Tahun Akademik</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Kode</th>
+                                    <th scope="col">Mata Pelajaran</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -266,11 +253,22 @@
                 <div class="modal-body">
                     <form action="#" id="form">
                         <div class="form-group">
-                            <div class="row mb-3">
-                                <label for="tahun" class="col-sm-2 col-form-label">Tahun</label>
-                                <div class="col-sm-10">
+                            <div class="row mb-1">
+                                <div class="col-lg-12">
+                                    <label for="kode_mapel" class="col-form-label">Kode Mata Pelajaran</label>
                                     <input type="hidden" value="" id="id" name="id" />
-                                    <input type="text" name="tahun" id="tahun" class="form-control" placeholder="Masukkan tahun akademik contoh : 2023/2024">
+                                    <input type="text" name="kode_mapel" id="kode_mapel" class="form-control" placeholder="">
+                                    <small class="text-danger" id="kode_error"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row mb-1">
+                                <div class="col-lg-12">
+                                    <label for="mapel" class="col-form-label">Mata Pelajaran</label>
+                                    <input type="hidden" value="" id="id" name="id" />
+                                    <input type="text" name="mapel" id="mapel" class="form-control" placeholder="">
+                                    <small class="text-danger" id="mapel_error"></small>
                                 </div>
                             </div>
                         </div>

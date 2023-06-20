@@ -21,11 +21,11 @@ class TahunAkademik extends CI_Controller
         $role_id = $data['user']['role_id'];
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
 
-        $data['title'] = 'Tahun Akademik';
+        $data['title'] = 'Tahun Pelajaran';
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
-        $this->load->view('master/tahunAkademik', $data);
+        $this->load->view('akademik/tahunAkademik', $data);
         $this->load->view('template/footer', $data);
     }
 
@@ -44,13 +44,29 @@ class TahunAkademik extends CI_Controller
 
     public function addTaAkademik()
     {
-        $table = 'tb_tahun_akademik';
-        $data = array(
-            'tahun_akademik' => $this->input->post('tahun'),
-        );
+        $this->form_validation->set_rules('tahun', 'Tahun', 'trim|required', [
+            'required' => 'Isi tahun pelajaran terlebih dahulu !'
+        ]);
 
-        $save = $this->crud->save($table, $data);
-        echo json_encode(array("status" => TRUE, "message" => 'Data role berhasil ditambah !'));
+
+        $table = 'tb_tahun_akademik';
+
+        if ($this->form_validation->run() == false) {
+
+            $array = array(
+                'error' => true,
+                'tahun_error' => form_error('tahun'),
+            );
+        } else {
+            $data = array(
+                'tahun_akademik' => $this->input->post('tahun'),
+            );
+
+            $save = $this->crud->save($table, $data);
+            $array = array("status" => TRUE, "message" => 'Data role berhasil ditambah !');
+        }
+
+        echo json_encode($array);
     }
 
     public function getTaAkademik($id)
@@ -73,16 +89,31 @@ class TahunAkademik extends CI_Controller
 
     public function updateTaAkademik()
     {
+
+        $this->form_validation->set_rules('tahun', 'Tahun', 'trim|required', [
+            'required' => 'Isi tahun pelajaran terlebih dahulu !'
+        ]);
+
+
         $table = 'tb_tahun_akademik';
 
-        $id = $this->input->post('id');
-        $data = array(
-            'tahun_akademik' => $this->input->post('tahun'),
-        );
+        if ($this->form_validation->run() == false) {
 
-        $this->crud->update(array('id' => $id), $data, $table);
+            $array = array(
+                'error' => true,
+                'tahun_error' => form_error('tahun'),
+            );
+        } else {
+            $id = $this->input->post('id');
+            $data = array(
+                'tahun_akademik' => $this->input->post('tahun'),
+            );
 
-        echo json_encode(array("status" => TRUE, "message" => 'Data tahun akademik berhasil diupdate !'));
+            $this->crud->update(array('id' => $id), $data, $table);
+            $array = array("status" => TRUE, "message" => 'Data role berhasil diupdate !');
+        }
+
+        echo json_encode($array);
     }
 
     public function aktif($id)
