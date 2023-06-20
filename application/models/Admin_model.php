@@ -60,6 +60,48 @@ class Admin_model extends CI_Model
         $this->db->from($this->table);
         return $this->db->count_all_results();
     }
+
+    /** Data User */
+
+    private function  _get_user($term = '')
+    {
+        $column = array('a.name', 'a.email', 'b.role');
+        $this->db->select('a.*, b.role');
+        $this->db->from('user as a');
+        $this->db->join('user_role as b', 'a.role_id = b.id');
+        $this->db->like('a.name', $term);
+        $this->db->or_like('a.email', $term);
+        $this->db->or_like('b.role', $term);
+
+        if (isset($_REQUEST['order'])) {
+            $this->db->order_by($column[$_REQUEST['order']['0']['column']], $_REQUEST['order']['0']['dir']);
+        } else if (isset($this->order)) {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+    }
+
+    function loadDataUser()
+    {
+        $this->_get_user();
+        if ($_POST['length'] != -1)
+            $this->db->limit($_POST['length'], $_POST['start']);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    function count_filtered_user()
+    {
+        $this->_get_user();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+    public function count_all_user()
+    {
+        $this->db->from('user');
+        return $this->db->count_all_results();
+    }
 }
 
 /* End of file Admin_model.php */

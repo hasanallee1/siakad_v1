@@ -30,8 +30,6 @@ class Admin extends CI_Controller
         $this->load->view('template/sidebar', $data);
         $this->load->view('admin/index', $data);
         $this->load->view('template/footer', $data);
-
-        // echo "Selamat Datang " . $data['user']['name'];
     }
 
     public function roleAccess()
@@ -207,6 +205,42 @@ class Admin extends CI_Controller
         }
 
         echo json_encode(array('status' => TRUE, 'message' => 'Akses diubah !'));
+    }
+
+
+    /**
+     * User Management
+     */
+
+    public function userManagement()
+    {
+        $email =  $this->session->userdata('email');
+
+        $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
+
+        $data['title'] = 'User Management';
+
+
+        $role_id = $data['user']['role_id'];
+        $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('admin/userManagement', $data);
+        $this->load->view('template/footer', $data);
+    }
+
+    public function loadDataUser()
+    {
+        $user = $this->admin->loadDataUser();
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->admin->count_all_user(),
+            "recordsFiltered" => $this->admin->count_filtered_user(),
+            "data" => $user,
+        );
+        //output to json format
+        echo json_encode($output);
     }
 }
 
