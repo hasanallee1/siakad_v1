@@ -17,10 +17,7 @@ class TahunAkademik extends CI_Controller
     {
         $email =  $this->session->userdata('email');
 
-        $data['ta'] = tahun_akademik();
-
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
-
         $role_id = $data['user']['role_id'];
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
 
@@ -50,7 +47,6 @@ class TahunAkademik extends CI_Controller
         $table = 'tb_tahun_akademik';
         $data = array(
             'tahun_akademik' => $this->input->post('tahun'),
-            'is_active' => $this->input->post('is_active'),
         );
 
         $save = $this->crud->save($table, $data);
@@ -72,7 +68,7 @@ class TahunAkademik extends CI_Controller
         $id = $this->input->post('id');
 
         $this->crud->delete($table, $id);
-        echo json_encode(array("status" => TRUE, "message" => 'Data role berhasil dihapus !'));
+        echo json_encode(array("status" => TRUE, "message" => 'Data tahun akademik berhasil dihapus !'));
     }
 
     public function updateTaAkademik()
@@ -81,12 +77,22 @@ class TahunAkademik extends CI_Controller
 
         $id = $this->input->post('id');
         $data = array(
-            'role' => $this->input->post('role')
+            'tahun_akademik' => $this->input->post('tahun'),
         );
 
         $this->crud->update(array('id' => $id), $data, $table);
 
-        echo json_encode(array("status" => TRUE, "message" => 'Data role berhasil diupdate !'));
+        echo json_encode(array("status" => TRUE, "message" => 'Data tahun akademik berhasil diupdate !'));
+    }
+
+    public function aktif($id)
+    {
+        // non aktifkan yg lain 
+        $off = $this->db->query("UPDATE tb_tahun_akademik SET is_active = 0 where is_active = 1 ");
+
+        $on = $this->db->query("UPDATE tb_tahun_akademik SET is_active = 1 where id = $id");
+
+        echo json_encode(array("status" => TRUE, "message" => 'Tahun Akademik Aktif !'));
     }
 }
 

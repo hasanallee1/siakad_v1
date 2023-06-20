@@ -21,7 +21,7 @@ class Menu extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
 
         $data['title'] = 'Menu Management';
-        $data['ta'] = tahun_akademik();
+
         $role_id = $data['user']['role_id'];
 
 
@@ -100,7 +100,7 @@ class Menu extends CI_Controller
 
         $data['menu'] = $this->db->get('user_menu')->result_array();
         $data['sub_menu'] = $this->db->get('user_sub_menu')->result_array();
-        $data['ta'] = tahun_akademik();
+
         $role_id = $data['user']['role_id'];
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
 

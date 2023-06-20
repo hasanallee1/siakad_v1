@@ -70,9 +70,9 @@
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
 
-        <div class="d-flex align-items-center  mt-2">
-            <h5><span class="badge bg-info"><i class="bi bi-calendar-check"></i> <?= $ta['tahun_akademik'] ?></span></h5>
-        </div>
+        <!-- <div class="d-flex align-items-center mt-2" style="padding-left: 20px;">
+            <h5><span class="badge bg-info"><i class="bi bi-calendar-check"></i> <?= tahun_akademik('tahun_akademik') ?></span></h5>
+        </div> -->
 
         <!-- 
         <div class="search-bar">

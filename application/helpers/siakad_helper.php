@@ -21,11 +21,11 @@ function is_logged_in()
     }
 }
 
-function tahun_akademik()
+function tahun_akademik($field)
 {
     $ci = get_instance();
 
     $tahunAkademik = $ci->db->get_where('tb_tahun_akademik', ['is_active' => 1])->row_array();
 
-    return $tahunAkademik;
+    return $tahunAkademik[$field];
 }

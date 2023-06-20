@@ -24,7 +24,7 @@ class User extends CI_Controller
 
 
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
-        $data['ta'] = tahun_akademik();
+
 
         $data['title'] = 'My Profile';
 

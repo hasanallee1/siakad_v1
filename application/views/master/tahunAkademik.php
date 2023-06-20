@@ -39,9 +39,9 @@
                     "data": "is_active",
                     "render": function(data) {
                         if (data == 1) {
-                            return '<span class="badge bg-info"><i class="ri-checkbox-circle-line"></i> Active</span>';
+                            return '<span class="badge bg-info"><i class="ri-checkbox-circle-line"></i> Aktif</span>';
                         } else {
-                            return '<span class="badge bg-danger"><i class="ri-close-circle-line"></i> Not Active</span>';
+                            return '<span class="badge bg-danger"><i class="ri-close-circle-line"></i> Tidak Aktif</span>';
                         }
                     }
                 },
@@ -49,7 +49,7 @@
                     "data": "null",
                     "className": 'text-center',
                     "render": function(data, type, row, meta) {
-                        return '<a class="btn btn-sm btn-warning" href=\' <?= base_url('admin/AccessMenu/') ?>' + row.id + ' \' title="Akses" ><i class="bi bi-key-fill"></i> Access</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_TaAkademik("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_TaAkademik("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
+                        return '<a class="btn btn-sm btn-warning" href="javascript:void(0)" title="Delete" onclick=\'aktif("' + row.id + '");\' title="Aktifkan" ><i class="bi bi-check-circle"></i> Active</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_TaAkademik("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_TaAkademik("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';
                     }
                 },
@@ -75,6 +75,23 @@
         $('#form')[0].reset();
     }
 
+    function aktif(id) {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('akademik/tahunAkademik/aktif/') ?>" + id,
+            // data: "data",
+            dataType: "json",
+            success: function(data) {
+                Swal.fire(
+                    'Aktif!',
+                    data.message,
+                    'success'
+                )
+                reload_table();
+            }
+        });
+    }
+
     function edit_TaAkademik(id) {
         save_method = 'update';
 
@@ -84,11 +101,11 @@
 
         $.ajax({
             type: "GET",
-            url: "<?= base_url('akademik/TahunAkademik/getTaAkademik') ?>/" + id,
+            url: "<?= base_url('akademik/tahunAkademik/getTaAkademik') ?>/" + id,
             dataType: "json",
             success: function(data) {
                 $('[name = "id"]').val(data.id);
-                $('[name = "tahun"]').val(data.tahun);
+                $('[name = "tahun"]').val(data.tahun_akademik);
                 $('#roleModal').modal('show');
                 $('.modal-title').text('Edit Role');
             }
@@ -159,19 +176,12 @@
         var id = document.getElementById('id').value;
         var tahun = document.getElementById('tahun').value;
 
-        if ($('#is_active').prop('checked')) {
-            var is_active = 1;
-        } else {
-            var is_active = 0;
-        }
-
         $.ajax({
             type: "POST",
             url: url,
             data: ({
                 id,
-                tahun,
-                is_active
+                tahun
             }),
             dataType: "json",
             success: function(data) {
@@ -261,18 +271,6 @@
                                 <div class="col-sm-10">
                                     <input type="hidden" value="" id="id" name="id" />
                                     <input type="text" name="tahun" id="tahun" class="form-control" placeholder="Masukkan tahun akademik contoh : 2023/2024">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row mb-3 mt-3">
-                                <div class="col-lg-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Aktif ?
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                         </div>

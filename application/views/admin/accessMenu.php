@@ -4,7 +4,7 @@
 
     $(document).ready(function() {
 
-        var role_id = <?= $role['id'] ?>;
+        var role_id = <?= $roleId['id'] ?>;
         // datatables
         table = $('#myTable').DataTable({
             "processing": true,
@@ -82,7 +82,7 @@
 
     function cekSubMenu(val1, val2) {
 
-        var role = <?= $role['id'] ?>;
+        var role = <?= $roleId['id'] ?>;
         var menuId = val1;
         var subMenuId = val2;
 
@@ -135,7 +135,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Role : <?= $role['role'] ?></h5>
+                        <h5 class="card-title">Role : <?= $roleId['role'] ?></h5>
                         <a type="button" href="<?= base_url('Admin/roleAccess') ?>" class="btn btn-sm btn-warning mb-3"><i class="bi bi-arrow-left-circle"></i> Kembali</a>
                         <table id="myTable" width="100%" class="table table-bordered">
                             <thead>

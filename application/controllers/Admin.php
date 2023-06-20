@@ -20,7 +20,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
 
         $data['title'] = 'Dashboard';
-        $data['ta'] = tahun_akademik();
+
 
 
         $role_id = $data['user']['role_id'];
@@ -41,7 +41,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
 
         $data['title'] = 'Role Access Management';
-        $data['ta'] = tahun_akademik();
+
 
         $role_id = $data['user']['role_id'];
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
@@ -114,10 +114,11 @@ class Admin extends CI_Controller
 
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
 
-        $data['ta'] = tahun_akademik();
-
         $role_id = $data['user']['role_id'];
+
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
+
+        $data['roleId'] = $this->db->get_where('user_role', ['id' => $id])->row_array();
 
         $data['title'] = 'Access Menu Management';
 
