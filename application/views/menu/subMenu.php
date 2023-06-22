@@ -35,13 +35,16 @@
                     "data": "menu"
                 },
                 {
-                    "data": "url"
+                    "data": "url",
+                    "sortable": false
                 },
                 {
-                    "data": "icon"
+                    "data": "icon",
+                    "sortable": false
                 },
                 {
                     "data": "is_active",
+                    "sortable": false,
                     "className": 'text-center',
                     "render": function(data) {
                         if (data == 1) {
@@ -54,6 +57,7 @@
                 {
                     "data": "null",
                     "className": 'text-center',
+                    "sortable": false,
                     "render": function(data, type, row, meta) {
                         return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_subMenu("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_menu("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';

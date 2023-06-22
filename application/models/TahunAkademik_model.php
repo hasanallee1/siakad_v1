@@ -7,8 +7,8 @@ class TahunAkademik_model extends CI_Model
 {
 
     var $table = 'tb_tahun_akademik';
-    var $column_order = array(null, 'tahun', null);
-    var $column_search = array('tahun');
+    var $column_order = array(null, 'tahun_akademik', null);
+    var $column_search = array('tahun_akademik');
     var $order = array('id' => 'asc'); //default order
 
     private function  _get_datatables_query()

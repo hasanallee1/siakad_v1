@@ -217,12 +217,12 @@ class Admin extends CI_Controller
         $email =  $this->session->userdata('email');
 
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
-
         $data['title'] = 'User Management';
-
-
         $role_id = $data['user']['role_id'];
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
+
+        // data role untuk pilihan
+        $data['userRole'] = $this->db->get('user_role')->result();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
@@ -241,6 +241,105 @@ class Admin extends CI_Controller
         );
         //output to json format
         echo json_encode($output);
+    }
+
+    public function addUser()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required', [
+            'required' => 'Nama tidak boleh kosong !'
+        ]);
+
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
+            'is_unique' => 'Email sudah terdaftar !',
+            'required' => 'Email tidak boleh kosong !'
+        ]);
+        // $this->form_validation->set_rules('username', 'Username', 'required|trim');
+        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[6]|matches[password2]', [
+            'matches' => 'Password tidak sama !',
+            'min_length' => 'Password terlalu pendek',
+            'required' => 'Password tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('password2', 'Password', 'required|trim');
+
+        $table = 'user';
+
+        if ($this->form_validation->run() == FALSE) {
+            $array = array(
+                'error' => true,
+                'nama_error' => form_error('nama'),
+                'email_error' => form_error('email'),
+                'password_error' => form_error('password1'),
+            );
+        } else {
+            $data = array(
+                'name' => htmlspecialchars($this->input->post('nama', true)),
+                'email' => htmlspecialchars($this->input->post('email', true)),
+                'password' =>  password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
+                'image' => 'default.jpg',
+                'role_id' => $this->input->post('role'),
+                'is_active' => $this->input->post('is_active'),
+                'date_created' => date('Y-m-d H:i:s')
+            );
+
+            $save = $this->crud->save($table, $data);
+            $array = array("status" => TRUE, "message" => 'Data user berhasil ditambah !');
+        }
+
+        echo json_encode($array);
+    }
+
+    public function updateUser()
+    {
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required', [
+            'required' => 'Nama tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email', [
+            'required' => 'Email tidak boleh kosong !'
+        ]);
+        // $this->form_validation->set_rules('username', 'Username', 'required|trim');
+        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[6]|matches[password2]', [
+            'matches' => 'Password dont match!',
+            'min_length' => 'Password too short'
+        ]);
+        $this->form_validation->set_rules('password2', 'Password', 'required|trim');
+
+        $table = 'user';
+
+        if ($this->form_validation->run() == FALSE) {
+            $array = array(
+                'error' => true,
+                'nama_error' => form_error('nama'),
+                'password_error' => form_error('password1'),
+            );
+        } else {
+            $data = array(
+                'name' => htmlspecialchars($this->input->post('nama', true)),
+                'email' => htmlspecialchars($this->input->post('email', true)),
+                'password' =>  password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
+                'role_id' => $this->input->post('role'),
+                'is_active' => $this->input->post('is_active'),
+                'date_modified' => date('Y-m-d H:i:s')
+
+            );
+
+
+            $id = $this->input->post('id');
+
+            $update = $this->crud->update(array('id' => $id), $data, $table);
+
+            $array = array("status" => TRUE, "message" => 'Data user berhasil diupdate !');
+        }
+
+        echo json_encode($array);
+    }
+
+    public function getUser($id)
+    {
+        $table = 'user';
+
+        $data = $this->crud->getData($table, $id);
+
+        echo json_encode($data);
     }
 }
 

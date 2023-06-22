@@ -35,11 +35,13 @@
                     "data": "email"
                 },
                 {
-                    "data": "role"
+                    "data": "role",
+                    "sortable": false,
                 },
                 {
                     "data": "is_active",
                     "className": 'text-center',
+                    "sortable": false,
                     "render": function(data) {
                         if (data == 1) {
                             return '<span class="badge bg-info"><i class="ri-checkbox-circle-line"></i> Active</span>';
@@ -51,8 +53,9 @@
                 {
                     "data": "null",
                     "className": 'text-center',
+                    "sortable": false,
                     "render": function(data, type, row, meta) {
-                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_subMenu("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_menu("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
+                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_user("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_user("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';
                     }
                 },
@@ -60,21 +63,33 @@
         });
 
 
+
+        $('#formInput').hide();
+
     });
 
     function reload_table() {
         table.ajax.reload(null, false); //reload datatable ajax 
     }
 
-    function add_subMenu() {
+
+    function add_user() {
         save_method = 'add';
-        $('.modal-title').text('Tambah Sub Menu');
+        $('#front').hide();
+        $('#formInput').show();
+        $('#card-title').text('Tambah User');
         $('.form-group').removeClass('has-error');
-        $('#menuModal').modal('show');
         $('#form')[0].reset();
     }
 
-    function edit_subMenu(id) {
+    function kembali() {
+        $('#formInput').hide();
+        $('#front').show();
+        $('#form')[0].reset();
+        $('.form-group').removeClass('has-error');
+    }
+
+    function edit_user(id) {
         save_method = 'update';
 
         $('.form-group').removeClass('has-error');
@@ -83,48 +98,68 @@
 
         $.ajax({
             type: "GET",
-            url: "<?= base_url('menu/getSubMenu') ?>/" + id,
+            url: "<?= base_url('admin/getUser') ?>/" + id,
             dataType: "json",
             success: function(data) {
                 $('[name = "id"]').val(data.id);
-                $('#title').val(data.title);
-                $('#menu').val(data.menu_id);
-                $('#sub_menu').val(data.sub_menu_id);
-                $('#url').val(data.url);
-                $('#ikon').val(data.icon);
+                $('#nama').val(data.name);
+                $('#email').val(data.email);
+                $('#role').val(data.role_id);
                 if (data.is_active == 1) {
                     $('#is_active').prop('checked', true);
                 } else {
                     $('#is_active').prop('checked', false);
                 }
-                $('#menuModal').modal('show');
-                $('.modal-title').text('Edit Menu');
+
+                $('#front').hide();
+                $('#formInput').show();
+                $('#btnSave').text('Update');
+                $('#card-title').text('Edit User');
             }
         });
 
 
     }
 
-    function delete_subMenu(id) {
-        if (confirm('Are you sure delete this data?')) {
-            $.ajax({
-                type: "POST",
-                url: "<?= base_url('menu/deleteSubMenu') ?>",
-                data: ({
-                    id
-                }),
-                dataType: "JSON",
-                success: function(data) {
-                    //if success reload ajax table
-                    alert('Data Berhasil dihapus !');
-                    $('#menuModal').modal('hide');
-                    reload_table();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error deleting data');
-                }
-            });
-        }
+    function delete_user(id) {
+        Swal.fire({
+            // title: 'Are you sure?',
+            text: "Data user akan dihapus !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= base_url('admin/deleteUser') ?>",
+                    data: ({
+                        id
+                    }),
+                    dataType: "JSON",
+                    success: function(data) {
+                        //if success reload ajax table
+                        Swal.fire(
+                            'Deleted!',
+                            data.message,
+                            'success'
+                        )
+                        reload_table();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    }
+                });
+
+            }
+        })
+
     }
 
 
@@ -135,85 +170,42 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?= base_url('menu/addSubMenu') ?>";
+            url = "<?= base_url('admin/addUser') ?>";
         } else {
-            url = "<?= base_url('menu/updateSubMenu') ?>";
+            url = "<?= base_url('admin/updateUser') ?>";
         }
 
-        var id = document.getElementById('id').value;
-        var title = document.getElementById('title').value;
-        var menu = $('#menu').find(":selected").attr('value');
-        var sub_menu = $('#sub_menu').find(":selected").attr('value');
-        var url1 = document.getElementById('url').value;
-        var ikon = document.getElementById('ikon').value;
-
-        if (sub_menu == '') {
-            sub_menu = 0;
-        } else {
-            sub_menu = sub_menu;
-        }
-
-        if ($('#is_active').prop('checked')) {
-            var is_active = 1;
-        } else {
-            var is_active = 0;
-        }
-
-        if (!url) {
-            Swal.fire({
-                icon: 'error',
-                // title: 'Oops...',
-                text: 'Url tidak boleh kosong !',
-            })
-            return false;
-        }
-
-        if (!title) {
-            Swal.fire({
-                icon: 'error',
-                // title: 'Oops...',
-                text: 'Nama Sub Menu tidak boleh kosong !',
-            })
-            return false;
-        }
-
-        if (!menu) {
-            Swal.fire({
-                icon: 'error',
-                // title: 'Oops...',
-                text: 'Pilih menu terlebih dahulu !',
-            })
-            return false;
-        }
-
-        if (!ikon) {
-            Swal.fire({
-                icon: 'error',
-                // title: 'Oops...',
-                text: 'ikon tidak boleh kosong !',
-            })
-            return false;
-        }
-
-
-
-        // $('#btnSave').text('saving...');
-        // $('#btnSave').attr('disabled', true);
 
         $.ajax({
             type: "POST",
             url: url,
-            data: ({
-                id,
-                title,
-                menu,
-                sub_menu,
-                url1,
-                ikon,
-                is_active
-            }),
+            data: $('#form').serialize(),
             dataType: "json",
             success: function(data) {
+
+
+                if (data.error) {
+                    if (data.nama_error != '') {
+                        $('#nama_error').html(data.nama_error);
+                        $('#btnSave').attr('disabled', false);
+                    } else {
+                        $('#nama_error').html('');
+                    }
+
+                    if (data.email_error != '') {
+                        $('#email_error').html(data.email_error);
+                        $('#btnSave').attr('disabled', false);
+                    } else {
+                        $('#email_error').html('');
+                    }
+
+                    if (data.password_error != '') {
+                        $('#password_error').html(data.password_error);
+                        $('#btnSave').attr('disabled', false);
+                    } else {
+                        $('#password_error').html('');
+                    }
+                }
 
                 if (data.status) {
                     Swal.fire(
@@ -221,7 +213,15 @@
                         data.message,
                         'success'
                     )
-                    $('#menuModal').modal('hide');
+
+                    $('#nama_error').html('');
+                    $('#email_error').html('');
+                    $('#password_error').html('');
+
+                    $('#formInput').hide();
+                    $('#front').show();
+                    $('#form')[0].reset();
+                    $('.form-group').removeClass('has-error');
                     reload_table();
 
                 }
@@ -262,7 +262,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data User</h5>
-                        <button type="button" id="add_data" onclick="add_subMenu()" class="btn btn-sm btn-primary mb-3"><i class="bi bi-plus-square"></i> Add Data</button>
+                        <button type="button" id="add_data" onclick="add_user()" class="btn btn-sm btn-primary mb-3"><i class="bi bi-plus-square"></i> Add Data</button>
                         <table id="myTable" class="table table-bordered" width="100%">
                             <thead>
                                 <tr>
@@ -284,90 +284,79 @@
         </div>
     </section>
 
-    <section class="section" id="form">
+    <section class="section" id="formInput">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="card-title">Data User</h5>
 
-    </section>
-
-    <div class="modal fade" id="menuModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Basic Modal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="#" id="form" class="row g-3">
-                        <div class="form-group">
-                            <div class="row mb-1">
-                                <div class="col-lg-12">
-                                    <label for="title" class="col-form-label">Judul</label>
-                                    <input type="hidden" value="" id="id" name="id" />
-                                    <input type="text" name="title" id="title" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div id="pilMenu" class="col-lg-12">
-                                    <label class="col-form-label">Pilih Menu</label>
-                                    <select class="form-select" id="menu" name="menu" aria-label="Default select example">
-                                        <option value=""></option>
-                                        <?php foreach ($menu as $m) : ?>
-                                            <option value="<?= $m['id'] ?>"><?= $m['menu'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div id="pilMenu" class="col-lg-12">
-                                    <label class="col-form-label">Pilih Sub Menu</label>
-                                    <select class="form-select" id="sub_menu" name="sub_menu" aria-label="Default select example">
-                                        <option value=""></option>
-                                        <?php foreach ($sub_menu as $sm) : ?>
-                                            <option value="<?= $sm['id'] ?>"><?= $sm['title'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <label for="url" class="col-sm-2 col-form-label">Url</label>
-                                    <input type="text" name="url" id="url" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <label for="url" class="col-sm-2 col-form-label">Ikon</label>
-                                    <input type="text" name="ikon" id="ikon" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row mb-3 mt-3">
-                                <div class="col-lg-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Aktif ?
-                                        </label>
+                        <form action="#" id="form" class="row g-3">
+                            <div class="form-group">
+                                <div class="row mb-1">
+                                    <div class="col-lg-6">
+                                        <label for="nama" class="col-form-label">Nama</label>
+                                        <input type="hidden" value="" id="id" name="id" />
+                                        <input type="text" name="nama" id="nama" class="form-control">
+                                        <small class="text-danger" id="nama_error"></small>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save changes</button>
+                            <div class="form-group">
+                                <div class="row mb-1">
+                                    <div class="col-lg-6">
+                                        <label for="email" class="col-form-label">Email</label>
+                                        <input type="email" name="email" id="email" class="form-control">
+                                        <small class="text-danger" id="email_error"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div id="pilRole" class="col-lg-6">
+                                        <label class="col-form-label">Pilih Role</label>
+                                        <select class="form-select" id="role" name="role" required aria-label="Default select example">
+                                            <option value=""></option>
+                                            <?php foreach ($userRole as $r) : ?>
+                                                <option value="<?= $r->id ?>"><?= $r->role ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <label for="password1" class="col-form-label">Password</label>
+                                        <input type="password" name="password1" id="password1" class="form-control">
+                                        <small class="text-danger" id="password_error"></small>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="password2" class="col-form-label">Ulangi Password</label>
+                                        <input type="password" name="password2" id="password2" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row mb-3 mt-3">
+                                    <div class="col-lg-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" checked value="1" type="checkbox" id="is_active" name="is_active">
+                                            <label class="form-check-label" for="gridCheck1">
+                                                Aktif ?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <button type="button" id="back" onclick="kembali()" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left-circle"></i> Kembali</button>
+                        <button type="submit" id="btnSave" onclick="save()" class="btn btn-sm btn-warning mb-3"><i class="bx bxs-save"></i> Simpan</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div><!-- End Basic Modal-->
+    </section>
+
 
 </main><!-- End #main -->

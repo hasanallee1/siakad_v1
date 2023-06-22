@@ -7,7 +7,7 @@ class MataPelajaran_model extends CI_Model
 {
 
     var $table = 'tb_mata_pelajaran';
-    var $column_order = array(null, 'tahun', null);
+    var $column_order = array(null, 'kode_mapel', 'nama_mapel');
     var $column_search = array('kode_mapel', 'nama_mapel');
     var $order = array('id' => 'asc'); //default order
 

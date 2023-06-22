@@ -91,7 +91,7 @@
     function delete_Mapel(id) {
         Swal.fire({
             // title: 'Are you sure?',
-            text: "Data mata pelajara akan dihapus !",
+            text: "Data mata pelajaran akan dihapus !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

@@ -16,6 +16,8 @@ class Submenu_model extends CI_Model
         $this->db->join('user_menu as b', 'a.menu_id = b.id');
         $this->db->like('a.title', $term);
         $this->db->or_like('b.menu', $term);
+        $this->db->or_like('a.icon', $term);
+        $this->db->or_like('a.url', $term);
 
         if (isset($_REQUEST['order'])) {
             $this->db->order_by($column[$_REQUEST['order']['0']['column']], $_REQUEST['order']['0']['dir']);

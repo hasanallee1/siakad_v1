@@ -83,9 +83,10 @@ class Admin_model extends CI_Model
 
     function loadDataUser()
     {
-        $this->_get_user();
-        if ($_POST['length'] != -1)
-            $this->db->limit($_POST['length'], $_POST['start']);
+        $term = $_REQUEST['search']['value'];
+        $this->_get_user($term);
+        if ($_REQUEST['length'] != -1)
+            $this->db->limit($_REQUEST['length'], $_REQUEST['start']);
         $query = $this->db->get();
         return $query->result_array();
     }

@@ -37,6 +37,7 @@
                 },
                 {
                     "data": "is_active",
+                    "sortable": false,
                     "render": function(data) {
                         if (data == 1) {
                             return '<span class="badge bg-info"><i class="ri-checkbox-circle-line"></i> Aktif</span>';
@@ -48,8 +49,9 @@
                 {
                     "data": "null",
                     "className": 'text-center',
+                    "sortable": false,
                     "render": function(data, type, row, meta) {
-                        return '<a class="btn btn-sm btn-warning" href="javascript:void(0)" title="Delete" onclick=\'aktif("' + row.id + '");\' title="Aktifkan" ><i class="bi bi-check-circle"></i> Active</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_TaAkademik("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_TaAkademik("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
+                        return '<a class="btn btn-sm btn-warning" href="javascript:void(0)" title="Aktif" onclick=\'aktif("' + row.id + '");\' title="Aktifkan" ><i class="bi bi-check-circle"></i> Active</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_TaAkademik("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_TaAkademik("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';
                     }
                 },
