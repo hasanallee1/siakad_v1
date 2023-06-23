@@ -2,6 +2,8 @@
     var save_method; //for save method string
     var table;
     $(document).ready(function() {
+
+
         // datatables
         table = $('#myTable').DataTable({
             "processing": true,

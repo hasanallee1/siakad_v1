@@ -275,7 +275,7 @@ class Admin extends CI_Controller
                 'name' => htmlspecialchars($this->input->post('nama', true)),
                 'email' => htmlspecialchars($this->input->post('email', true)),
                 'password' =>  password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
-                'image' => 'default.jpg',
+                'image' => 'user.png',
                 'role_id' => $this->input->post('role'),
                 'is_active' => $this->input->post('is_active'),
                 'date_created' => date('Y-m-d H:i:s')
@@ -340,6 +340,27 @@ class Admin extends CI_Controller
         $data = $this->crud->getData($table, $id);
 
         echo json_encode($data);
+    }
+
+    public function deleteUser()
+    {
+        $table = 'user';
+
+        $id = $this->input->post('id');
+
+        //get image user
+        $user = $this->db->get_where('user', ['id' => $id])->row_array();
+
+        // cek old image
+        $old_image = $user['image'];
+
+        if ($old_image != 'user.png') {
+            unlink(FCPATH . 'assets/img/' . $old_image);
+        }
+
+        $this->crud->delete($table, $id);
+
+        echo json_encode(array("status" => TRUE, "message" => 'User telah dihapus !'));
     }
 }
 

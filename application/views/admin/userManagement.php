@@ -75,18 +75,10 @@
 
     function add_user() {
         save_method = 'add';
-        $('#front').hide();
-        $('#formInput').show();
-        $('#card-title').text('Tambah User');
+        $('#roleModal').modal('show');
+        $('.modal-title').text('Tambah User');
         $('.form-group').removeClass('has-error');
         $('#form')[0].reset();
-    }
-
-    function kembali() {
-        $('#formInput').hide();
-        $('#front').show();
-        $('#form')[0].reset();
-        $('.form-group').removeClass('has-error');
     }
 
     function edit_user(id) {
@@ -111,10 +103,9 @@
                     $('#is_active').prop('checked', false);
                 }
 
-                $('#front').hide();
-                $('#formInput').show();
+                $('#roleModal').modal('show');
                 $('#btnSave').text('Update');
-                $('#card-title').text('Edit User');
+                $('.modal-title').text('Edit User');
             }
         });
 
@@ -218,8 +209,7 @@
                     $('#email_error').html('');
                     $('#password_error').html('');
 
-                    $('#formInput').hide();
-                    $('#front').show();
+                    $('#roleModal').modal('hide');
                     $('#form')[0].reset();
                     $('.form-group').removeClass('has-error');
                     reload_table();
@@ -284,79 +274,83 @@
         </div>
     </section>
 
-    <section class="section" id="formInput">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title" id="card-title">Data User</h5>
 
-                        <form action="#" id="form" class="row g-3">
-                            <div class="form-group">
-                                <div class="row mb-1">
-                                    <div class="col-lg-6">
-                                        <label for="nama" class="col-form-label">Nama</label>
-                                        <input type="hidden" value="" id="id" name="id" />
-                                        <input type="text" name="nama" id="nama" class="form-control">
-                                        <small class="text-danger" id="nama_error"></small>
+    <div class="modal fade" id="roleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Basic Modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" id="form" class="row g-3">
+                        <div class="form-group">
+                            <div class="row mb-1">
+                                <div class="col-lg-9">
+                                    <label for="nama" class="col-form-label">Nama</label>
+                                    <input type="hidden" value="" id="id" name="id" />
+                                    <input type="text" name="nama" id="nama" class="form-control">
+                                    <small class="text-danger" id="nama_error"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row mb-1">
+                                <div class="col-lg-9">
+                                    <label for="email" class="col-form-label">Email</label>
+                                    <input type="email" name="email" id="email" class="form-control">
+                                    <small class="text-danger" id="email_error"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div id="pilRole" class="col-lg-9">
+                                    <label class="col-form-label">Pilih Role</label>
+                                    <select class="form-select" id="role" name="role" required aria-label="Default select example">
+                                        <option value=""></option>
+                                        <?php foreach ($userRole as $r) : ?>
+                                            <option value="<?= $r->id ?>"><?= $r->role ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label for="password1" class="col-form-label">Password</label>
+                                    <input type="password" name="password1" id="password1" class="form-control">
+                                    <small class="text-danger" id="password_error"></small>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="password2" class="col-form-label">Ulangi Password</label>
+                                    <input type="password" name="password2" id="password2" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="row mb-3 mt-3">
+                                <div class="col-lg-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" checked value="1" type="checkbox" id="is_active" name="is_active">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Aktif ?
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row mb-1">
-                                    <div class="col-lg-6">
-                                        <label for="email" class="col-form-label">Email</label>
-                                        <input type="email" name="email" id="email" class="form-control">
-                                        <small class="text-danger" id="email_error"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div id="pilRole" class="col-lg-6">
-                                        <label class="col-form-label">Pilih Role</label>
-                                        <select class="form-select" id="role" name="role" required aria-label="Default select example">
-                                            <option value=""></option>
-                                            <?php foreach ($userRole as $r) : ?>
-                                                <option value="<?= $r->id ?>"><?= $r->role ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <label for="password1" class="col-form-label">Password</label>
-                                        <input type="password" name="password1" id="password1" class="form-control">
-                                        <small class="text-danger" id="password_error"></small>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="password2" class="col-form-label">Ulangi Password</label>
-                                        <input type="password" name="password2" id="password2" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row mb-3 mt-3">
-                                    <div class="col-lg-12">
-                                        <div class="form-check">
-                                            <input class="form-check-input" checked value="1" type="checkbox" id="is_active" name="is_active">
-                                            <label class="form-check-label" for="gridCheck1">
-                                                Aktif ?
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <button type="button" id="back" onclick="kembali()" class="btn btn-sm btn-secondary mb-3"><i class="bi bi-arrow-left-circle"></i> Kembali</button>
-                        <button type="submit" id="btnSave" onclick="save()" class="btn btn-sm btn-warning mb-3"><i class="bx bxs-save"></i> Simpan</button>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div><!-- End Basic Modal-->
 
 
 </main><!-- End #main -->

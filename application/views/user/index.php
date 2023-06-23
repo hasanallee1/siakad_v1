@@ -1,3 +1,63 @@
+<script>
+    var save_method; //for save method string
+    var table;
+
+    function save() {
+
+
+        $('#form').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('user/updateUser') ?>",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
+                dataType: "json",
+                success: function(data) {
+                    if (data.error) {
+                        if (data.name_error != '') {
+                            $('#name_error').html(data.name_error);
+                            $('#btnSave').attr('disabled', false);
+                        } else {
+                            $('#name_error').html('');
+                        }
+
+                        if (data.email_error != '') {
+                            $('#email_error').html(data.email_error);
+                            $('#btnSave').attr('disabled', false);
+                        } else {
+                            $('#email_error').html('');
+                        }
+
+                        if (data.image_error != '') {
+                            $('#image_error').html(data.image_error);
+                            $('#btnSave').attr('disabled', false);
+                        } else {
+                            $('#image_error').html('');
+                        }
+                    }
+
+                    if (data.status) {
+                        Swal.fire(
+                            'Berhasil',
+                            data.message,
+                            'success'
+                        )
+
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+
+
+    }
+</script>
+
 <main id="main" class="main">
 
     <div class="pagetitle">
@@ -18,15 +78,9 @@
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-                        <img src="<?= base_url('assets/NiceAdmin/') ?>/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <img src="<?= base_url('assets/img/') . $user['image'] ?>" alt="Profile" class="rounded-circle">
                         <h2><?= $user['name'] ?></h2>
                         <h3><?= $role['role'] ?></h3>
-                        <div class="social-links mt-2">
-                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                        </div>
                     </div>
                 </div>
 
@@ -68,114 +122,42 @@
                                     <div class="col-lg-9 col-md-8"><?= $user['email'] ?></div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Member Since</div>
-                                    <div class="col-lg-9 col-md-8"><?= date($user['date_created']) ?></div>
-                                </div>
-
                             </div>
 
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                 <!-- Profile Edit Form -->
-                                <form>
+                                <form id="form" enctype="multipart/form-data" method="POST">
                                     <div class="row mb-3">
                                         <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <img src="assets/img/profile-img.jpg" alt="Profile">
+                                            <img src="<?= base_url('assets/img/') . $user['image'] ?>" alt="Profile">
                                             <div class="pt-2">
-                                                <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                <input class="form-control" name="image" type="file" id="image">
+                                                <small class="text-danger" id="image_error"></small>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                        <label for="name" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
+                                            <input type="hidden" id="id" name="id" value="<?= $user['id'] ?>">
+                                            <input name="name" type="text" class="form-control" id="name" value="<?= $user['name'] ?>">
+                                            <small class="text-danger" id="name_error"></small>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                        <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job" value="Web Designer">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country" value="USA">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="phone" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
+                                            <input name="email" type="email" class="form-control" id="email" value="<?= $user['email'] ?>">
+                                            <small class="text-danger" id="email_error"></small>
                                         </div>
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <button type="submit" id="btnSave" onclick="save()" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </form><!-- End Profile Edit Form -->
 

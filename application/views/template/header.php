@@ -29,15 +29,17 @@
     <!-- jquery -->
     <script type="text/javascript" src="<?= base_url('assets/js/jquery.min.js'); ?>"></script>
 
+
+
     <!-- datatables -->
 
     <link href="<?= base_url('assets/datatables') ?>/datatables.min.css" rel="stylesheet" />
     <script src="<?= base_url('assets/datatables') ?>/datatables.min.js"></script>
 
     <!-- select 2 -->
+    <link href="<?= base_url('assets') ?>/css/select2.min.css" rel="stylesheet" />
+    <script src="<?= base_url('assets') ?>/js/select2.min.js"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- sweetalert -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
@@ -90,7 +92,7 @@
                 <li class="nav-item dropdown pe-3">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                        <img src="<?= base_url('assets/NiceAdmin') ?>/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <img src="<?= base_url('assets/img/') . $user['image'] ?> " alt="Profile" class="rounded-circle">
                         <span class="d-none d-md-block dropdown-toggle ps-2"><?= $user['name'] ?></span>
                     </a><!-- End Profile Iamge Icon -->
 
