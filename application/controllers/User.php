@@ -49,7 +49,6 @@ class User extends CI_Controller
         ]);
         $this->form_validation->set_rules('image', 'Image', 'callback_file_check');
 
-        $table = 'user';
 
 
 
@@ -62,6 +61,10 @@ class User extends CI_Controller
             );
         } else {
             $id = $this->input->post('id');
+            $name = htmlspecialchars($this->input->post('name', true));
+            $email = htmlspecialchars($this->input->post('email', true));
+            $date = date('Y-m-d H:i:s');
+
             $upload_image = $_FILES['image']['name'];
 
             if ($upload_image) {
@@ -78,23 +81,23 @@ class User extends CI_Controller
                     // cek old image
                     $old_image = $user['image'];
 
-                    if ($old_image != 'user.png') {
+                    if ($old_image != 'user.png' || $old_image == '') {
                         unlink(FCPATH . 'assets/img/' . $old_image);
+                        // unlink(FCPATH . 'assets/img/' . $old_image);
                     }
 
                     $img = $this->upload->data('file_name');
+                    $this->db->set('image', $img);
                 } else {
                     $data['error'] = $this->upload->display_errors();
                 }
             }
 
-            $data = array(
-                'name' => htmlspecialchars($this->input->post('name', true)),
-                'email' => htmlspecialchars($this->input->post('email', true)),
-                'image' => $img,
-            );
+            $this->db->set('name', $name);
+            $this->db->set('date_modified', $date);
+            $this->db->where('id', $id);
+            $this->db->update('user');
 
-            $this->crud->update(array('id' => $id), $data, $table);
             $array = array("status" => TRUE, "message" => 'Data user berhasil diupdate !');
         }
 
@@ -105,7 +108,14 @@ class User extends CI_Controller
     {
         $allowed_mime_type_arr = array('image/gif', 'image/jpeg', 'image/jpg', 'image/png');
         $mime = get_mime_by_extension($_FILES['image']['name']);
+
+        // if ($_FILES['image']['size'] > 2048) {
+        //     $this->form_validation->set_message('file_check', 'Maksimum size 2Mb !');
+        //     return false;
+        // }
+
         if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != "") {
+
             if (in_array($mime, $allowed_mime_type_arr)) {
                 return true;
             } else {

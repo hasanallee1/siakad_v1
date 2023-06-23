@@ -17,7 +17,7 @@
             ],
             "iDisplayLength": 5,
             "ajax": {
-                "url": "<?= base_url('akademik/MataPelajaran/loadData') ?>",
+                "url": "<?= base_url('akademik/RuangKelas/loadData') ?>",
                 "type": "POST"
             },
             // "columnDefs": [{
@@ -33,16 +33,16 @@
                     }
                 },
                 {
-                    "data": "kode_mapel"
+                    "data": "kode_ruangan"
                 },
                 {
-                    "data": "nama_mapel"
+                    "data": "nama_ruangan"
                 },
                 {
                     "data": "null",
                     "className": 'text-center',
                     "render": function(data, type, row, meta) {
-                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_Mapel("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_Mapel("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
+                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_ruang("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_ruang("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';
                     }
                 },
@@ -57,14 +57,14 @@
 
     function add_role() {
         save_method = 'add';
-        $('.modal-title').text('Tambah Mata Pelajaran');
+        $('.modal-title').text('Tambah Ruangan');
         $('.form-group').removeClass('has-error');
         $('#roleModal').modal('show');
         $('#form')[0].reset();
     }
 
 
-    function edit_Mapel(id) {
+    function edit_ruang(id) {
         save_method = 'update';
 
         $('.form-group').removeClass('has-error');
@@ -73,25 +73,25 @@
 
         $.ajax({
             type: "GET",
-            url: "<?= base_url('akademik/MataPelajaran/getMapel') ?>/" + id,
+            url: "<?= base_url('akademik/RuangKelas/get') ?>/" + id,
             dataType: "json",
             success: function(data) {
                 $('[name = "id"]').val(data.id);
-                $('[name = "kode_mapel"]').val(data.kode_mapel);
-                $('[name = "mapel"]').val(data.nama_mapel);
-                $('#kode_mapel').prop('readonly', true);
+                $('[name = "kode_ruang"]').val(data.kode_ruangan);
+                $('[name = "nama_ruang"]').val(data.nama_ruangan);
+                $('#kode_ruang').prop('readonly', true);
                 $('#roleModal').modal('show');
-                $('.modal-title').text('Edit Mata Pelajaran');
+                $('.modal-title').text('Edit Ruangan');
             }
         });
 
 
     }
 
-    function delete_Mapel(id) {
+    function delete_ruang(id) {
         Swal.fire({
             // title: 'Are you sure?',
-            text: "Data mata pelajaran akan dihapus !",
+            text: "Data ruangan akan dihapus !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -101,7 +101,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url('akademik/MataPelajaran/deleteMapel') ?>",
+                    url: "<?= base_url('akademik/RuangKelas/delete') ?>",
                     data: ({
                         id
                     }),
@@ -142,9 +142,9 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?= base_url('akademik/MataPelajaran/addMapel') ?>";
+            url = "<?= base_url('akademik/RuangKelas/add') ?>";
         } else {
-            url = "<?= base_url('akademik/MataPelajaran/updateMapel') ?>";
+            url = "<?= base_url('akademik/RuangKelas/update') ?>";
         }
 
         $.ajax({
@@ -162,17 +162,17 @@
                         $('#kode_error').html('');
                     }
 
-                    if (data.mapel_error != '') {
-                        $('#mapel_error').html(data.mapel_error);
+                    if (data.nama_error != '') {
+                        $('#nama_error').html(data.nama_error);
                         $('#btnSave').attr('disabled', false);
                     } else {
-                        $('#mapel_error').html('');
+                        $('#nama_error').html('');
                     }
                 }
 
                 if (data.status) {
                     $('#kode_error').html('');
-                    $('#mapel_error').html('');
+                    $('#nama_error').html('');
                     $('#form')[0].reset();
                     $('#roleModal').modal('hide');
                     Swal.fire(
@@ -218,14 +218,14 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Mata Pelajaran</h5>
+                        <h5 class="card-title">Data Ruang Kelas</h5>
                         <button type="button" id="add_data" onclick="add_role()" class="btn btn-sm btn-primary mb-3"><i class="bi bi-plus-square"></i> Add Data</button>
                         <table id="myTable" width="100%" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Kode</th>
-                                    <th scope="col">Mata Pelajaran</th>
+                                    <th scope="col">Ruang Kelas</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -255,9 +255,9 @@
                         <div class="form-group">
                             <div class="row mb-1">
                                 <div class="col-lg-12">
-                                    <label for="kode_mapel" class="col-form-label">Kode Mata Pelajaran</label>
+                                    <label for="kode_ruang" class="col-form-label">Kode Ruangan</label>
                                     <input type="hidden" value="" id="id" name="id" />
-                                    <input type="text" name="kode_mapel" id="kode_mapel" class="form-control" placeholder="">
+                                    <input type="text" name="kode_ruang" id="kode_ruang" class="form-control" placeholder="">
                                     <small class="text-danger" id="kode_error"></small>
                                 </div>
                             </div>
@@ -265,10 +265,10 @@
                         <div class="form-group">
                             <div class="row mb-1">
                                 <div class="col-lg-12">
-                                    <label for="mapel" class="col-form-label">Mata Pelajaran</label>
+                                    <label for="nama_ruang" class="col-form-label">Nama Ruangan</label>
                                     <input type="hidden" value="" id="id" name="id" />
-                                    <input type="text" name="mapel" id="mapel" class="form-control" placeholder="">
-                                    <small class="text-danger" id="mapel_error"></small>
+                                    <input type="text" name="nama_ruang" id="nama_ruang" class="form-control" placeholder="">
+                                    <small class="text-danger" id="nama_error"></small>
                                 </div>
                             </div>
                         </div>
