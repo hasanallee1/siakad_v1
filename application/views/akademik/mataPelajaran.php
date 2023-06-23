@@ -59,6 +59,7 @@
         save_method = 'add';
         $('.modal-title').text('Tambah Mata Pelajaran');
         $('.form-group').removeClass('has-error');
+        $('#kode_mapel').prop('readonly', false);
         $('#roleModal').modal('show');
         $('#form')[0].reset();
     }
