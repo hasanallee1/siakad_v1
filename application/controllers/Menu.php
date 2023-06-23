@@ -162,10 +162,18 @@ class Menu extends CI_Controller
     public function updateSubMenu()
     {
         $table = 'user_sub_menu';
+
+        $sub_menu = $this->input->post('sub_menu');
+
+        if ($sub_menu == '') {
+            $sub_menu = 0;
+        } else {
+            $sub_menu = $sub_menu;
+        }
         $data = array(
             'title' => $this->input->post('title'),
             'menu_id' => $this->input->post('menu'),
-            'sub_menu_id' => $this->input->post('sub_menu'),
+            'sub_menu_id' => $sub_menu,
             'url' => $this->input->post('url1'),
             'icon' => $this->input->post('ikon'),
             'is_active' => $this->input->post('is_active'),
