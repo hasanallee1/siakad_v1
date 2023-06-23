@@ -156,10 +156,8 @@
         var url1 = document.getElementById('url').value;
         var ikon = document.getElementById('ikon').value;
 
-        if (sub_menu == '') {
+        if (!sub_menu) {
             sub_menu = 0;
-        } else {
-            sub_menu = sub_menu;
         }
 
         if ($('#is_active').prop('checked')) {
