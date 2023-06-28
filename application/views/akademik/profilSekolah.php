@@ -355,9 +355,6 @@
         </div>
     </section>
 
-    <section class="section" id="roleMenu">
-
-    </section>
 
     <div class="modal fade" id="roleModal" tabindex="-1">
         <div class="modal-dialog modal-xl">

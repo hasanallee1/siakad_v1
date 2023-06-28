@@ -36,6 +36,10 @@
     <link href="<?= base_url('assets/datatables') ?>/datatables.min.css" rel="stylesheet" />
     <script src="<?= base_url('assets/datatables') ?>/datatables.min.js"></script>
 
+    <!-- datepicker -->
+    <link href="<?= base_url('assets/datepicker') ?>/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <script src="<?= base_url('assets/datepicker') ?>/js/bootstrap-datepicker.min.js"></script>
+
     <!-- select 2 -->
     <link href="<?= base_url('assets') ?>/css/select2.min.css" rel="stylesheet" />
     <script src="<?= base_url('assets') ?>/js/select2.min.js"></script>

@@ -32,12 +32,12 @@ class RuangKelas extends CI_Controller
 
     public function loadData()
     {
-        $tahun = $this->kelas->loadData();
+        $data = $this->kelas->loadData();
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->kelas->count_all(),
             "recordsFiltered" => $this->kelas->count_filtered(),
-            "data" => $tahun,
+            "data" => $data,
         );
         //output to json format
         echo json_encode($output);

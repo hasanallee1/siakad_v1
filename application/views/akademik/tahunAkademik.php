@@ -64,10 +64,6 @@
         table.ajax.reload(null, false); //reload datatable ajax 
     }
 
-    // function access_menu(id) {
-    //     $('#front').hide();
-    //     $('#roleMenu').show();
-    // }
 
     function add_role() {
         save_method = 'add';
@@ -264,9 +260,6 @@
         </div>
     </section>
 
-    <section class="section" id="roleMenu">
-
-    </section>
 
     <div class="modal fade" id="roleModal" tabindex="-1">
         <div class="modal-dialog">

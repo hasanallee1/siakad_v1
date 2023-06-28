@@ -30,12 +30,12 @@ class MataPelajaran extends CI_Controller
 
     public function loadData()
     {
-        $tahun = $this->mapel->loadData();
+        $data = $this->mapel->loadData();
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->mapel->count_all(),
             "recordsFiltered" => $this->mapel->count_filtered(),
-            "data" => $tahun,
+            "data" => $data,
         );
         //output to json format
         echo json_encode($output);

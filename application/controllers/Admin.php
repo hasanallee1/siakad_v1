@@ -299,11 +299,7 @@ class Admin extends CI_Controller
             'required' => 'Email tidak boleh kosong !'
         ]);
         // $this->form_validation->set_rules('username', 'Username', 'required|trim');
-        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[6]|matches[password2]', [
-            'matches' => 'Password dont match!',
-            'min_length' => 'Password too short'
-        ]);
-        $this->form_validation->set_rules('password2', 'Password', 'required|trim');
+
 
         $table = 'user';
 

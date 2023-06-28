@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kelas extends CI_Controller
+class Siswa extends CI_Controller
 {
 
     public function __construct()
@@ -9,34 +9,35 @@ class Kelas extends CI_Controller
         parent::__construct();
         is_logged_in();
         $this->load->model('Crud_model', 'crud');
-        $this->load->model('Kelas_model', 'kelas');
+        $this->load->model('Siswa_model', 'siswa');
     }
-
 
     public function index()
     {
         $email =  $this->session->userdata('email');
-
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
-        $role_id = $data['user']['role_id'];
-        $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
-        $data['tingkat'] = $this->db->get('tb_tingkat_kelas')->result_array();
 
-        $data['title'] = 'Kelas';
+        $role_id = $data['user']['role_id'];
+
+
+        $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
+
+
+        $data['title'] = 'Siswa';
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
-        $this->load->view('akademik/kelas', $data);
+        $this->load->view('akademik/siswa', $data);
         $this->load->view('template/footer', $data);
     }
 
     public function loadData()
     {
-        $data = $this->kelas->loadData();
+        $data = $this->siswa->loadData();
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->kelas->count_all(),
-            "recordsFiltered" => $this->kelas->count_filtered(),
+            "recordsTotal" => $this->siswa->count_all(),
+            "recordsFiltered" => $this->siswa->count_filtered(),
             "data" => $data,
         );
         //output to json format
@@ -79,59 +80,6 @@ class Kelas extends CI_Controller
 
         echo json_encode($array);
     }
-
-    public function get($id)
-    {
-        $table = 'tb_kelas';
-        $data = $this->crud->getData($table, $id);
-        echo json_encode($data);
-    }
-
-    public function update()
-    {
-        $this->form_validation->set_rules('kode_kelas', 'kode kelas', 'trim|required', [
-            'required' => 'Kode kelas tidak boleh kosong !'
-        ]);
-        $this->form_validation->set_rules('nama_kelas', 'nama kelas', 'trim|required', [
-            'required' => 'Nama kelas tidak boleh kosong !'
-        ]);
-
-        $table = 'tb_kelas';
-
-
-        if ($this->form_validation->run() == FALSE) {
-            $array = array(
-                'error' => TRUE,
-                'kode_error' => form_error('kode_kelas'),
-                'nama_error' => form_error('nama_kelas')
-            );
-        } else {
-
-            $id = $this->input->post('id');
-            $data = array(
-                'nama_kelas' => $this->input->post('nama_kelas'),
-                'tingkat_id' => $this->input->post('tingkat'),
-            );
-
-            $this->crud->update(array('id' => $id), $data, $table);
-
-            $array = array(
-                'status' => true,
-                'message' => 'Data Kelas Berhasil Diubah !'
-            );
-        }
-
-        echo json_encode($array);
-    }
-
-    public function delete()
-    {
-        $table = 'tb_kelas';
-        $id = $this->input->post('id');
-        $this->crud->delete($table, $id);
-
-        echo json_encode(array('status' => true, 'message' => 'Data Kelas dihapus!'));
-    }
 }
 
-/* End of file TingkatKelas.php */
+/* End of file Siswa.php */

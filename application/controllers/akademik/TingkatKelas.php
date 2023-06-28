@@ -31,12 +31,12 @@ class TingkatKelas extends CI_Controller
 
     public function loadData()
     {
-        $tahun = $this->tingkat->loadData();
+        $data = $this->tingkat->loadData();
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->tingkat->count_all(),
             "recordsFiltered" => $this->tingkat->count_filtered(),
-            "data" => $tahun,
+            "data" => $data,
         );
         //output to json format
         echo json_encode($output);
