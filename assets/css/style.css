@@ -996,6 +996,59 @@ h6 {
   color: #666;
 }
 
+/* profil sekolah */
+.profil2 .profile-card img {
+  max-width: 120px;
+}
+
+.profil2 .profile-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c384e;
+  margin: 10px 0 0 0;
+}
+
+.profil2 .profile-card h3 {
+  font-size: 18px;
+}
+
+.profil2 .profile-card .social-links a {
+  font-size: 20px;
+  display: inline-block;
+  color: rgba(1, 41, 112, 0.5);
+  line-height: 0;
+  margin-right: 10px;
+  transition: 0.3s;
+}
+
+.profil2 .profile-card .social-links a:hover {
+  color: #012970;
+}
+
+.profil2 .profile-overview .row {
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.profil2 .profile-overview .card-title {
+  color: #012970;
+}
+
+.profil2 .profile-overview .label {
+  font-weight: 600;
+  color: rgba(1, 41, 112, 0.6);
+}
+
+.profil2 .profile-edit label {
+  font-weight: 600;
+  color: rgba(1, 41, 112, 0.6);
+}
+
+.profil2 .profile-edit img {
+  max-width: 120px;
+}
+
+
 /*--------------------------------------------------------------
 # Profie Page
 --------------------------------------------------------------*/

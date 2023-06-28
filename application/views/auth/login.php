@@ -10,8 +10,8 @@
 
                             <div class="d-flex justify-content-center py-4">
                                 <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/logo.png" alt="">
-                                    <span class="d-none d-lg-block">NiceAdmin</span>
+                                    <img src="<?= base_url('assets/NiceAdmin/') ?>img/logo.png" alt="">
+                                    <span class="d-none d-lg-block">SiAkad</span>
                                 </a>
                             </div><!-- End Logo -->
 
@@ -21,7 +21,7 @@
 
                                     <div class="pt-4 pb-2">
                                         <h5 class="card-title text-center pb-0 fs-4">Login</h5>
-                                        <p class="text-center small">Enter your email & password to login</p>
+                                        <p class="text-center small">Masukkan Email dan Password</p>
                                     </div>
 
                                     <?= $this->session->flashdata('message');
@@ -46,9 +46,9 @@
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">Login</button>
                                         </div>
-                                        <div class="col-12">
+                                        <!-- <div class="col-12">
                                             <p class="small mb-0">Don't have account? <a href="<?= base_url('auth/registrasi'); ?>">Create an account</a></p>
-                                        </div>
+                                        </div> -->
                                     </form>
 
                                 </div>

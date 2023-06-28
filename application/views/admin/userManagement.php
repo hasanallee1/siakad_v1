@@ -76,6 +76,7 @@
     function add_user() {
         save_method = 'add';
         $('#roleModal').modal('show');
+        $('#hide_password').show();
         $('.modal-title').text('Tambah User');
         $('.form-group').removeClass('has-error');
         $('#form')[0].reset();
@@ -83,6 +84,8 @@
 
     function edit_user(id) {
         save_method = 'update';
+
+        $('#hide_password').hide();
 
         $('.form-group').removeClass('has-error');
 
@@ -316,7 +319,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="hide_password">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <label for="password1" class="col-form-label">Password</label>

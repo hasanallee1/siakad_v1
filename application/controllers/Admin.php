@@ -16,15 +16,17 @@ class Admin extends CI_Controller
     public function index()
     {
         $email =  $this->session->userdata('email');
-
         $data['user'] = $this->db->get_where('user', ['email' => $email])->row_array();
-
         $data['title'] = 'Dashboard';
 
-
-
+        // get user role
         $role_id = $data['user']['role_id'];
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
+
+        // get jumlah user aktif
+        $user = $this->db->query("SELECT count(*) as jum from user where is_active = 1")->row_array();
+        $data['jum_user'] = $user['jum'];
+
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
