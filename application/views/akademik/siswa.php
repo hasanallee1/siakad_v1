@@ -3,23 +3,17 @@
     var table;
     $(document).ready(function() {
 
-        // datepicker
-        $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true,
-                todayHighlight: true,
-                orientation: "bottom left"
+        $(".calendar").flatpickr({
+            dropdownParent: $('#roleModal')
+        });
 
-            }
-
-        );
         // datatables
         table = $('#myTable').DataTable({
             "processing": true,
             "serverSide": true,
             "responsive": true,
             "order": [
-                [0, 'asc']
+                [2, 'asc']
             ],
             "ordering": true,
             "aLengthMenu": [
@@ -28,7 +22,7 @@
             ],
             "iDisplayLength": 5,
             "ajax": {
-                "url": "<?= base_url('akademik/Kelas/loadData') ?>",
+                "url": "<?= base_url('akademik/Siswa/loadData') ?>",
                 "type": "POST"
             },
             // "columnDefs": [{
@@ -38,24 +32,29 @@
             "columns": [{
                     "data": 'id',
                     "className": 'text-center',
-                    // "sortable": false,
+                    "sortable": false,
                     render: function(data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
                 {
-                    "data": "kode_tingkat"
+                    "data": "nis"
                 },
                 {
-                    "data": "kode_kelas"
+                    "data": "nama"
                 }, {
-                    "data": "nama_kelas"
+                    "data": "tempat_lahir",
+                    "sortable": false
+                },
+                {
+                    "data": "tanggal_lahir",
+                    "sortable": false
                 },
                 {
                     "data": "null",
                     "className": 'text-center',
                     "render": function(data, type, row, meta) {
-                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_kelas("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_kelas("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
+                        return '<a class="btn btn-sm btn-success" href="javascript:void(0)" title="Edit" onclick=\'edit_siswa("' + row.id + '");\'><i class="bi bi-pencil-fill"></i> Edit</a>' + '&nbsp;&nbsp;&nbsp;' + '<a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Delete" onclick=\'delete_siswa("' + row.id + '");\'><i class="bi bi bi-trash"></i> Delete</a>';
                         // return '<a href="show/' + data + '">Show</a>';
                     }
                 },
@@ -72,13 +71,12 @@
         save_method = 'add';
         $('.modal-title').text('Tambah Data Siswa');
         $('.form-group').removeClass('has-error');
-        $('#kode_kelas').prop('readonly', false);
         $('#roleModal').modal('show');
         $('#form')[0].reset();
     }
 
 
-    function edit_kelas(id) {
+    function edit_siswa(id) {
         save_method = 'update';
 
         $('.form-group').removeClass('has-error');
@@ -91,22 +89,45 @@
             dataType: "json",
             success: function(data) {
                 $('[name = "id"]').val(data.id);
-                $('[name = "kode_kelas"]').val(data.kode_kelas);
-                $('[name = "nama_kelas"]').val(data.nama_kelas);
-                $('#tingkat').val(data.tingkat_id);
-                $('#kode_kelas').prop('readonly', true);
+                $('#nama').val(data.nama);
+                $('#nis').val(data.nis);
+                $('#agama').val(data.agama);
+                $('#tempat_lahir').val(data.tempat_lahir);
+                $('#tanggal_lahir').val(data.tanggal_lahir);
+                $('#jenis_kelamin').val(data.jenis_kelamin);
+                $('#alamat').val(data.alamat);
+                $('#kel_des').val(data.kelurahan);
+                $('#kecamatan').val(data.kecamatan);
+                $('#kab_kota').val(data.kabupaten);
+                $('#provinsi').val(data.provinsi);
+                $('#kode_pos').val(data.kode_pos);
+                $('#ayah').val(data.ayah);
+                $('#pekerjaan_ayah').val(data.pekerjaan_ayah);
+                $('#no_telp_ayah').val(data.no_telp_ayah);
+                $('#ibu').val(data.ibu);
+                $('#pekerjaan_ibu').val(data.pekerjaan_ibu);
+                $('#no_telp_ibu').val(data.no_telp_ibu);
+                $('#wali').val(data.wali);
+                $('#pekerjaan_wali').val(data.pekerjaan_wali);
+                $('#no_telp_wali').val(data.no_telp_wali);
+                if (data.is_active == 1) {
+                    $('#is_active').prop('checked', true);
+                } else {
+                    $('#is_active').prop('checked', false);
+                }
+
                 $('#roleModal').modal('show');
-                $('.modal-title').text('Edit Kelas');
+                $('.modal-title').text('Edit Siswa');
             }
         });
 
 
     }
 
-    function delete_kelas(id) {
+    function delete_siswa(id) {
         Swal.fire({
             // title: 'Are you sure?',
-            text: "Data kelas akan dihapus !",
+            text: "Data Siswa akan dihapus !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -157,20 +178,9 @@
         var url;
 
         if (save_method == 'add') {
-            url = "<?= base_url('akademik/Kelas/add') ?>";
+            url = "<?= base_url('akademik/Siswa/add') ?>";
         } else {
-            url = "<?= base_url('akademik/Kelas/update') ?>";
-        }
-
-        var tingkat = $('#tingkat').find(':selected').attr('value');
-
-        if (!tingkat) {
-            Swal.fire({
-                icon: 'error',
-                // title: 'Oops...',
-                text: 'PIlih tingkat kelas terlebih dahulu !',
-            })
-            return false;
+            url = "<?= base_url('akademik/Siswa/update') ?>";
         }
 
         $.ajax({
@@ -181,18 +191,17 @@
             success: function(data) {
 
                 if (data.error) {
-                    if (data.kode_error != '') {
-                        $('#kode_error').html(data.kode_error);
-                        $('#btnSave').attr('disabled', false);
-                    } else {
-                        $('#kode_error').html('');
-                    }
-
                     if (data.nama_error != '') {
                         $('#nama_error').html(data.nama_error);
                         $('#btnSave').attr('disabled', false);
                     } else {
                         $('#nama_error').html('');
+                    }
+                    if (data.nis_error != '') {
+                        $('#nis_error').html(data.nis_error);
+                        $('#btnSave').attr('disabled', false);
+                    } else {
+                        $('#nis_error').html('');
                     }
                 }
 
@@ -244,7 +253,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Kelas</h5>
+                        <h5 class="card-title">Data Siswa</h5>
                         <button type="button" id="add_data" onclick="add_role()" class="btn btn-sm btn-primary mb-3"><i class="bi bi-plus-square"></i> Add Data</button>
                         <button type="button" id="add_data" onclick="add_role()" class="btn btn-sm btn-success mb-3"><i class="bx bxs-file-import"></i> Import Excel</button>
                         <button type="button" id="add_data" onclick="add_role()" class="btn btn-sm btn-warning mb-3"><i class="ri-file-excel-line"></i> Export Excel</button>
@@ -253,9 +262,10 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Tingkat</th>
-                                    <th scope="col">Kode</th>
-                                    <th scope="col">Kelas</th>
+                                    <th scope="col">NIS</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Tempat Lahir</th>
+                                    <th scope="col">Tanggal Lahir</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -270,7 +280,7 @@
     </section>
 
 
-    <div class="modal fade" id="roleModal" tabindex="-1">
+    <div class="modal fade" data-bs-focus="false" id="roleModal" tabindex="-1">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -284,12 +294,13 @@
                                 <div class="col-lg-5">
                                     <label for="nama" class="col-form-label"><span class="text-danger">*</span>Nama Lengkap</label>
                                     <input type="hidden" value="" id="id" name="id" />
-                                    <input type="text" name="nama" id="nama" class="form-control" placeholder="">
+                                    <input type="text" name="nama" id="nama" class="form-control" placeholder="" required>
                                     <small class="text-danger" id="nama_error"></small>
                                 </div>
                                 <div class="col-lg-3">
                                     <label for="nis" class="col-form-label">NIS (Nomor Induk Siswa)</label>
                                     <input type="text" name="nis" id="nis" class="form-control" placeholder="">
+                                    <small class="text-danger" id="nis_error"></small>
                                 </div>
                                 <div class="col-lg-4">
                                     <label for="jenis_kelamin" class="col-form-label">Jenis Kelamin</label>
@@ -322,8 +333,8 @@
                                     <!-- <label for="tanggal_lahir" class="col-form-label">Tanggal Lahir</label>
                                     <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" placeholder=""> -->
                                     <label for="tanggal_lahir" class="col-form-label">Tanggal Lahir</label>
-                                    <div class="input-group" id="datepicker">
-                                        <input type="text" class="form-control datepicker" name="date" id="date" />
+                                    <div class="input-group">
+                                        <input type="text" class="form-control calendar" name="tanggal_lahir" id="tanggal_lahir" />
                                         <span class="input-group-append">
                                             <span class="input-group-text bg-light d-block">
                                                 <i class="bi bi-calendar3"></i>

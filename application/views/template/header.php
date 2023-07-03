@@ -40,6 +40,9 @@
     <link href="<?= base_url('assets/datepicker') ?>/css/bootstrap-datepicker.css" rel="stylesheet" />
     <script src="<?= base_url('assets/datepicker') ?>/js/bootstrap-datepicker.min.js"></script>
 
+    <link href="<?= base_url('assets/flatpickr') ?>/flatpickr.min.css" rel="stylesheet" />
+    <script src="<?= base_url('assets/flatpickr') ?>/flatpickr.min.js"></script>
+
     <!-- select 2 -->
     <link href="<?= base_url('assets') ?>/css/select2.min.css" rel="stylesheet" />
     <script src="<?= base_url('assets') ?>/js/select2.min.js"></script>

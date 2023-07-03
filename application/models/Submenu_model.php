@@ -39,18 +39,19 @@ class Submenu_model extends CI_Model
 
     function count_filtered()
     {
-        $this->_get_datatables_query();
+        $term = $_REQUEST['search']['value'];
+        $this->_get_datatables_query($term);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
     public function count_all()
     {
-        // $this->db->from($this->table);
-        // return $this->db->count_all_results();
+        // $this->db->from('user_sub_menu');
         $this->_get_datatables_query();
-        $query = $this->db->get();
-        return $query->num_rows();
+        return $this->db->count_all_results();
+        // $query = $this->db->get();
+        // return $query->num_rows();
     }
 }
 

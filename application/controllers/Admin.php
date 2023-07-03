@@ -27,6 +27,14 @@ class Admin extends CI_Controller
         $user = $this->db->query("SELECT count(*) as jum from user where is_active = 1")->row_array();
         $data['jum_user'] = $user['jum'];
 
+        //get jumlah siswa
+        $user = $this->db->query("SELECT count(*) as jum from tb_siswa")->row_array();
+        $data['jum_siswa'] = $user['jum'];
+
+        //get jumlah guru
+        $user = $this->db->query("SELECT count(*) as jum from tb_guru")->row_array();
+        $data['jum_guru'] = $user['jum'];
+
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
@@ -235,6 +243,7 @@ class Admin extends CI_Controller
     public function loadDataUser()
     {
         $user = $this->admin->loadDataUser();
+
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->admin->count_all_user(),

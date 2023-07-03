@@ -93,7 +93,8 @@ class Admin_model extends CI_Model
 
     function count_filtered_user()
     {
-        $this->_get_user();
+        $term = $_REQUEST['search']['value'];
+        $this->_get_user($term);
         $query = $this->db->get();
         return $query->num_rows();
     }

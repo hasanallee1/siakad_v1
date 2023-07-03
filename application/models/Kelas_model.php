@@ -35,7 +35,8 @@ class Kelas_model extends CI_Model
 
     function count_filtered()
     {
-        $this->_get_datatables_query();
+        $term = $_REQUEST['search']['value'];
+        $this->_get_datatables_query($term);
         $query = $this->db->get();
         return $query->num_rows();
     }
