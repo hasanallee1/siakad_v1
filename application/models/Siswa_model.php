@@ -7,7 +7,8 @@ class Siswa_model extends CI_Model
     private function  _get_siswa($term = '')
     {
         $column = array('a.id', 'a.nis', 'a.nama');
-        $this->db->select('a.id, a.nama, a.nis, a.tempat_lahir,tanggal_indo(a.tanggal_lahir) as tanggal_lahir');
+        $this->db->select('a.id, a.nama, a.nis, a.tempat_lahir,a.tanggal_lahir as tanggal_lahir');
+        // $this->db->select('a.id, a.nama, a.nis, a.tempat_lahir,tanggal_indo(a.tanggal_lahir) as tanggal_lahir');
         $this->db->from('tb_siswa as a');
         $this->db->like('a.nama', $term);
         $this->db->or_like('a.nis', $term);
