@@ -200,6 +200,7 @@ class Admin extends CI_Controller
         $menu_id = $this->input->post('menuId');
         $sub_menu_id = $this->input->post('subMenuId');
 
+
         $data = array(
             'role_id' => $role_id,
             'menu_id' => $menu_id,
@@ -208,7 +209,10 @@ class Admin extends CI_Controller
 
         $cek = $this->db->get_where('user_access_menu', $data);
 
-        if ($cek->num_rows == 0) {
+        // var_dump($cek->num_rows());
+        // exit;
+
+        if ($cek->num_rows() == 0) {
             $this->db->insert('user_access_menu', $data);
         } else {
             $this->db->delete('user_access_menu', $data);
