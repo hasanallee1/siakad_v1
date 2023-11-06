@@ -60,6 +60,7 @@ class TahunAkademik extends CI_Controller
         } else {
             $data = array(
                 'tahun_akademik' => $this->input->post('tahun'),
+                'semester' => $this->input->post('semester'),
             );
 
             $save = $this->crud->save($table, $data);
@@ -107,10 +108,11 @@ class TahunAkademik extends CI_Controller
             $id = $this->input->post('id');
             $data = array(
                 'tahun_akademik' => $this->input->post('tahun'),
+                'semester' => $this->input->post('semester'),
             );
 
             $this->crud->update(array('id' => $id), $data, $table);
-            $array = array("status" => TRUE, "message" => 'Data role berhasil diupdate !');
+            $array = array("status" => TRUE, "message" => 'Data tahun pelajaran berhasil diupdate !');
         }
 
         echo json_encode($array);

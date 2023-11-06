@@ -36,6 +36,9 @@
                     "data": "tahun_akademik"
                 },
                 {
+                    "data": "semester"
+                },
+                {
                     "data": "is_active",
                     "sortable": false,
                     "render": function(data) {
@@ -104,6 +107,7 @@
             success: function(data) {
                 $('[name = "id"]').val(data.id);
                 $('[name = "tahun"]').val(data.tahun_akademik);
+                $('[name = "semester"]').val(data.semester);
                 $('#roleModal').modal('show');
                 $('.modal-title').text('Edit Role');
             }
@@ -173,13 +177,15 @@
 
         var id = document.getElementById('id').value;
         var tahun = document.getElementById('tahun').value;
+        var semester = document.getElementById('semester').value;
 
         $.ajax({
             type: "POST",
             url: url,
             data: ({
                 id,
-                tahun
+                tahun,
+                semester
             }),
             dataType: "json",
             success: function(data) {
@@ -227,7 +233,7 @@
         <h1><?= $title ?></h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item active"><?= $title ?></li>
             </ol>
         </nav>
@@ -246,6 +252,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Tahun Akademik</th>
+                                    <th scope="col">Semester</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -277,6 +284,17 @@
                                     <input type="hidden" value="" id="id" name="id" />
                                     <input type="text" name="tahun" id="tahun" class="form-control" placeholder="contoh : 2023/2024">
                                     <small class="text-danger" id="tahun_error"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="semester" class="col-sm-2 col-form-label">Semester</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="semester" id="semester">
+                                        <option value="">- Pilih Semester -</option>
+                                        <option value="Ganjil">Ganjil</option>
+                                        <option value="Genap">Genap</option>
+                                    </select>
+                                    <small class="text-danger" id="semester_error"></small>
                                 </div>
                             </div>
                         </div>
