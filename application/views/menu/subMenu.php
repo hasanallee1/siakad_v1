@@ -14,10 +14,10 @@
             ],
             "ordering": true,
             "aLengthMenu": [
-                [5, 25, 75, -1],
-                [5, 25, 75, "All"]
+                [10, 25, 75, -1],
+                [10, 25, 75, "All"]
             ],
-            "iDisplayLength": 5,
+            "iDisplayLength": 10,
             "ajax": {
                 "url": "<?= base_url('menu/loadDataSubMenu') ?>",
                 "type": "POST"
@@ -256,7 +256,7 @@
         <h1><?= $title ?></h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item active"><?= $title ?></li>
             </ol>
         </nav>
